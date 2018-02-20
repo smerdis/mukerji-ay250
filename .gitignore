@@ -1,1 +1,4 @@
 Data
+*files*
+creds.py
+*.wav
