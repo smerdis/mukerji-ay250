@@ -1,0 +1,45 @@
+Your score: 9/17
+
+Breakdown & Comments: 
+
+----------------------------------------
+Problem 1: 3/5
+----------------------------------------
+1/1: plot with caption
+2/4: analysis
+
+You can insert images in markdown cells; see
+HW 1's assignment notebook
+
+Your analysis/critique was really simplistic; if you
+think almost nothing is wrong with this figure, you should
+have chosen a different figure for this exercise. But I see
+a lot wrong with the figure... like the fact that nothing is 
+labeled? Perhaps you are so familiar with the content that 
+you didn't notice the plot's shortcomings. But when you
+look at a plot (especially your own), you should imagine 
+cutting it out (without a caption) and putting it on a slide
+in a talk. What would you need to label or explain in words 
+for your audience to understand it? What would you need to tell
+them to ignore? 
+
+
+----------------------------------------
+Problem 2: 2/7
+----------------------------------------
+1/3: Recreated plot
+1/3: New dynamic interactions
+0/1: Analysis of changes
+
+It doesn't look like you gave any thought to the types of
+interactive tools this plot could use to be useful. 
+
+----------------------------------------
+Problem 3: 4/5
+----------------------------------------
+4/5: Reproduced plot: title, twin_x, legend, limits, linestyles
+
+Wanted to see two different fonts. 'family' kwarg
+
+
+Graded by C. E. Harris
