@@ -3,3 +3,5 @@ Data
 creds.py
 *.wav
 50_categories/
+cleanData/
+*.mat
