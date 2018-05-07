@@ -38,13 +38,42 @@ def load_individual_data(data_file, columns):
     return subj_df
 
 def load_individual_os_data(data_file):
-    """Load data for Orientation Suppression task which has 11 columns."""
+    """
+    Load data for Orientation Suppression task which has 11 columns.
+
+    Staircase number for a given test block (= file number)
+    Eye (1=weaker eye, 2= fellow eye)
+    Mask Orientation (0=parallel, 90=orthogonal)
+    Binocular condition (1= monocular, 2=dichoptic)
+    Mask Contrast (michelson)
+    Trial number for this staircase
+    Probe contrast recommended by staircase algorithm
+    Response Accuracy (1=correct, 0=incorrect)
+    Probe Contrast used (I don't remember it ever being different from #7 and was really just a sanity check)
+    Interval that probe was presented in (1 or 2)
+    File number (=test block)
+    """
     columns_os = ["StaircaseNumber", "Eye", "Orientation", "Presentation", "MaskContrast", "TrialNumberStaircase",
               "ProbeContrastRecommended", "ResponseAccuracy", "ProbeContrastUsed", "ProbeInterval", "FileNumber"]
     return load_individual_data(data_file, columns_os)
 
 def load_individual_ss_data(data_file):
-    """Load data for Surround Suppression task which has 12 columns."""
+    """
+    Load data for Surround Suppression task which has 12 columns.
+
+    Staircase number for a given test block (= file number)
+    Eye (1=weaker eye, 2= fellow eye)
+    Mask Orientation (0=parallel, 90=orthogonal)
+    Binocular Condition (1= monocular, 2=dichoptic)
+    Trial number for this staircase
+    Contrast increment recommended by staircase algorithm
+    Response Accuracy (1=correct, 0=incorrect)
+    Mask Contrast (michelson)
+    Probe location (1-4, let me know if you need to know which number represents which quadrant)
+    Response (1-4)
+    Probe contrast increment used (I don't remember it ever being different from #6 and was really just a sanity check)
+    File number (=test block)
+    """
     columns_ss = ["StaircaseNumber", "Eye", "Orientation", "Presentation", "TrialNumberStaircase",
               "ProbeContrastRecommended", "ResponseAccuracy", "MaskContrast", "ProbeLocation",
                   "Response", "ProbeContrastUsed",  "FileNumber"]
