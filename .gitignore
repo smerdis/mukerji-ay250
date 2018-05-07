@@ -5,3 +5,5 @@ creds.py
 50_categories/
 cleanData/
 *.mat
+__pycache__/
+.ipynb_checkpoints/
