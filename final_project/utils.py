@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from scipy.io import loadmat
+import lmfit as lf
+
 
 def load_individual_data(data_file, columns):
     """Function that loads individual psychophysics data stored in .mat files.
@@ -78,3 +80,52 @@ def load_individual_ss_data(data_file):
               "ProbeContrastRecommended", "ResponseAccuracy", "MaskContrast", "ProbeLocation",
                   "Response", "ProbeContrastUsed",  "FileNumber"]
     return load_individual_data(data_file, columns_ss)
+
+def summarize_conditions(df, gvars):
+    """
+    Condense the data frame from individual trials to statistics of each condition that will be used for modeling.
+    """
+    grouped = df.groupby(gvars)
+
+    # For each combination of the above, how many trials (n), how many correct (c), and what's the percentage?
+    condensed_df = grouped['ResponseAccuracy'].agg([len, np.count_nonzero]).rename(columns={'len':'n', 'count_nonzero':'c'})
+    condensed_df['pct_correct'] = condensed_df['c']/condensed_df['n']
+
+    return grouped, condensed_df
+
+def model_condition(g, err_func, params):
+    """
+    Model a condition. This function is to be applied to each group of observations, where a group is a particular:
+    - Subject (individual)
+    - Task (OS/SS)
+    - Mask Orientation (Iso/Cross)
+    - Presentation (nMono/nDicho)
+    - Eye (which viewed the target, De/Nde)
+
+    For this group of observations, the params (an lmfit Parameters object) are fitted by minimizing err_func.
+    """
+
+    print(g.name, len(g))
+
+    assert(np.all(g.Eye==g.Eye.iloc[0])) # Make sure we only are looking at data for one eye
+    Eye = g.Eye.iloc[0]
+    assert(np.all(g.Presentation==g.Presentation.iloc[0])) # again, one condition only
+    Presentation = g.Presentation.iloc[0]
+
+    t = g.ProbeContrastUsed
+    m = g.MaskContrast
+    n = g.n
+    c = g.c
+    zs = np.zeros_like(t)
+
+    #print(t, m, n, c)
+    if Presentation==2: # dichoptic - target and mask to different eyes
+        contrasts = (t, zs, zs, m, n, c)
+    elif Presentation==1: # monocular
+        contrasts = (t, zs, m, zs, n, c)
+
+    params_fit = lf.minimize(err_func, params, args=contrasts)
+    pfit = params_fit.params
+    #pfit.pretty_print()
+    retvars = pd.Series(pfit.valuesdict(), index=params.keys())
+    return retvars
