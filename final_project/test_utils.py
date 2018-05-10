@@ -1,6 +1,5 @@
 from unittest import TestCase
-import math
-from numpy import inf, isinf, nan, isnan
+import numpy as np
 import utils
 
 class TestUtils(TestCase):

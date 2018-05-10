@@ -141,6 +141,4 @@ def model_condition(g, err_func, params):
 
     params_fit = lf.minimize(err_func, params, args=contrasts)
     pfit = params_fit.params
-    #pfit.pretty_print()
-    retvars = pd.Series(pfit.valuesdict(), index=params.keys())
-    return retvars
+    return pd.Series(pfit.valuesdict(), index=params.keys())
