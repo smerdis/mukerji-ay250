@@ -14,9 +14,11 @@ def plot_suppressive_weights(os_fitted_df):
     TOOLS="pan,wheel_zoom,box_select,lasso_select,reset"
 
     # create the scatter plot
-    p = figure(tools=TOOLS, plot_width=600, plot_height=600, min_border=10, min_border_left=50,
-               toolbar_location="above", x_axis_location=None, y_axis_location=None,
-               title="Plots of monocular and interocular suppressive weights")
+    p = figure(tools=TOOLS, plot_width=800, plot_height=600, min_border=10, min_border_left=50,
+               toolbar_location="above",
+               x_axis_label="Monocular suppressive weight",
+               y_axis_label="Interocular suppressive weight",
+               title="Monocular and interocular suppressive weights")
     p.background_fill_color = "#fafafa"
     p.select(BoxSelectTool).select_every_mousemove = False
     p.select(LassoSelectTool).select_every_mousemove = False
