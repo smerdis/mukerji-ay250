@@ -6,10 +6,28 @@
 # So some of the code will be the same and some will be new
 
 import numpy as np
+import lmfit as lf
 
 def stage1(cmpt_thiseye, cmpt_othereye, mask_thiseye, mask_othereye, m=1.3, S=1, w_xm=1, w_xd=1):
     """First (pre-binocular-summation) stage of the two-stage model"""
     return (cmpt_thiseye**m)/(S + cmpt_thiseye + cmpt_othereye + w_xm*mask_thiseye + w_xd*mask_othereye)
+
+def two_stage_parameters():
+    """
+    Return the parameters of the two-stage model as a lmfit Parameters object.
+    This allows their values, ranges, and whetehr they are free or fixed to be specified.
+    """
+    params = lf.Parameters()
+    params.add('m', value=1.3, vary=False)
+    params.add('S', value=1, vary=False)
+    params.add('w_m', value=1, min=0.0, max=10.0, vary=True)
+    params.add('w_d', value=1, min=0.0, max=10.0, vary=True)
+    params.add('a', value=0, vary=True)
+    params.add('k', value=0.2, vary=False)
+    params.add('p', value=8, vary=False)
+    params.add('q', value=6.5, vary=False)
+    params.add('Z', value=.0085, vary=False)
+    return params
 
 def two_stage_response(params, C_thiseye, C_othereye, X_thiseye, X_othereye, n, c):
     """
@@ -73,4 +91,4 @@ def loglikelihood(n, c, predicted_pct_correct):
         c_pred = np.round(predicted_pct_correct*n)
         ll_pred = (c_pred * np.log(predicted_pct_correct)) + ((n-c_pred)*(np.log(1-predicted_pct_correct)))
         ll_obs = (c*np.log(c/n)) + ((n-c)*np.log(1-(c/n)))
-        return ll_pred-ll_obs
+        return ll_pred-ll_obs # since lf.minimize() minimizes the sum of squares, return a residual
