@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.io import loadmat
 import lmfit as lf
+import glob
 
 
 def load_individual_data(data_file, columns):
@@ -37,7 +38,9 @@ def load_individual_data(data_file, columns):
     # Make Subject column and put it first
     subj_df['Subject'] = subject_code
     subj_df = subj_df[['Subject', *columns]]
-    return subj_df
+
+    # Omit the baseline conditions (orientations -1 and -2) when returning
+    return subj_df[subj_df.Orientation>=0]
 
 def load_individual_os_data(data_file):
     """
@@ -80,6 +83,18 @@ def load_individual_ss_data(data_file):
               "ProbeContrastRecommended", "ResponseAccuracy", "MaskContrast", "ProbeLocation",
                   "Response", "ProbeContrastUsed",  "FileNumber"]
     return load_individual_data(data_file, columns_ss)
+
+def load_all_data(globstr, loader_func):
+    """
+    Load all the data from the files specified by globstr using the specified loading function,
+    concatenate them and return.
+    """
+    data_files = glob.glob(globstr)
+    df = pd.DataFrame()
+    for data_file in data_files:
+        df = pd.concat([df, loader_func(data_file)])
+    return df
+
 
 def summarize_conditions(df, gvars):
     """

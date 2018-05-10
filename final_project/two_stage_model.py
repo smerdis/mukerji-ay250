@@ -54,6 +54,8 @@ def two_stage_response(params, C_thiseye, C_othereye, X_thiseye, X_othereye, n, 
         # model with facilitation, taken from Meese & Baker 2009
         resp_tm = ((1 + a*binsum_mask)*(binsum_target**p))/(Z+binsum_target**q)
         responses[i] = resp_tm
+
+        # calculate some additional stuff that we could use
         dprimes[i] = resp_tm * k # not sure about this...
         predicted_pct_correct[i] = norm.cdf(dprimes[i])
         errors[i] = predicted_pct_correct[i]-(ncorrect/ntrials)
@@ -62,7 +64,13 @@ def two_stage_response(params, C_thiseye, C_othereye, X_thiseye, X_othereye, n, 
     return likelihoods
 
 def loglikelihood(n, c, predicted_pct_correct):
+    """
+    Calculate log-likelihood of the parameters that predicted predicted_pct_correct for a condition with n trials and c corrects (observed)
+    """
     if c==n or c==0 or predicted_pct_correct==0 or predicted_pct_correct==1:
         return 0
     else:
-        return (c * np.log(predicted_pct_correct)) + ((n-c)*(np.log(1-predicted_pct_correct)))
+        c_pred = np.round(predicted_pct_correct*n)
+        ll_pred = (c_pred * np.log(predicted_pct_correct)) + ((n-c_pred)*(np.log(1-predicted_pct_correct)))
+        ll_obs = (c*np.log(c/n)) + ((n-c)*np.log(1-(c/n)))
+        return ll_pred-ll_obs
