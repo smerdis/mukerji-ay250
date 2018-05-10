@@ -72,7 +72,7 @@ def plot_suppressive_weights(os_fitted_df):
 
     def update(attr, old, new):
         inds = np.array(new['1d']['indices'])
-        if len(inds) == 0 or len(inds) == len(x):
+        if len(inds) == 0 or len(inds) == len(os_fitted_df['w_m']):
             hhist1, hhist2 = hzeros, hzeros
             vhist1, vhist2 = vzeros, vzeros
         else:
